@@ -1,21 +1,62 @@
 # Underwater Acoustic Sensor Communication Prototype
 
-An embedded communication experiment that transmits water-related sensor data using audio-frequency FSK and decodes it on a separate receiver.
+<p align="center">
+  <strong>Audio-frequency FSK communication for transmitting water sensor data between embedded nodes</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Arduino-C++-00979D?logo=arduino&logoColor=white" />
+  <img src="https://img.shields.io/badge/FSK-Digital_Communication-2563EB" />
+  <img src="https://img.shields.io/badge/Embedded-Prototype-4B5563" />
+</p>
+
+## Project at a Glance
+
+| Item | Details |
+|---|---|
+| Domain | Embedded communication |
+| Modulation | Binary FSK |
+| Data | Temperature and TDS-oriented readings |
+| Transmitter | Tone-based embedded node |
+| Receiver | Frequency detection + LCD output |
+| Status | Academic communication prototype |
+
+## System Design
+
+<p align="center">
+  <img src="TRANSMITER_BLOCK.png" width="48%" alt="Transmitter block diagram" />
+  <img src="RECEIVER_BLOCK.png" width="48%" alt="Receiver block diagram" />
+</p>
 
 ## Overview
-The transmitter reads temperature and TDS-oriented sensor data, converts text characters into binary data, and represents bits using two audio frequencies. The receiver measures the incoming frequency, reconstructs characters, parses the payload, and displays the decoded values on an I2C LCD.
 
-## Communication Method
-- Binary Frequency-Shift Keying (FSK)
-- High tone represents one binary state
-- Low tone represents the other
-- Character-by-character transmission
-- Receiver-side synchronization and decoding
+The transmitter converts sensor values into characters, converts each character into binary data, and sends the bits using two audio frequencies. The receiver estimates incoming frequency, reconstructs the byte stream, parses the payload, and displays the decoded values.
 
-## Technology
-ESP32 / Arduino, C++, DS18B20/DallasTemperature, analog TDS input, microphone input, I2C LCD.
+## Communication Flow
 
-## Structure
+```mermaid
+flowchart LR
+    A[Temperature + TDS] --> B[Payload Encoding]
+    B --> C[8-bit Characters]
+    C --> D[Binary FSK Tones]
+    D --> E[Acoustic Channel]
+    E --> F[Frequency Detection]
+    F --> G[Byte Reconstruction]
+    G --> H[LCD Display]
+```
+
+## Technology Stack
+
+- ESP32 / Arduino
+- C++
+- DallasTemperature / DS18B20
+- Analog TDS input
+- Microphone input
+- I2C LCD
+- Binary FSK
+
+## Repository Structure
+
 ```text
 Underwater/
 ├── Transmiter/Transmiter.ino
@@ -28,13 +69,18 @@ Underwater/
 └── RECIEVER_CIRCUIT.png
 ```
 
-## Future Improvements
-- Add checksums / CRC
-- Improve synchronization and framing
-- Increase communication speed
-- Characterize range and error rate underwater
-- Replace threshold decoding with frequency-domain detection
+## Future Work
+
+- Add packet framing
+- Add CRC / checksum validation
+- Improve synchronization
+- Increase bit rate
+- Characterize underwater range and BER
+- Use FFT/Goertzel-based frequency detection
 - Add retransmission and packet IDs
 
 ## Author
+
 **Sadik Shaik**
+
+Computer Engineering · Embedded Systems · Digital Communication
